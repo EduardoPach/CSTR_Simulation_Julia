@@ -57,9 +57,9 @@ To solve this problem the Julia Packages [DifferentialEquations.jl](https://diff
 
 ## 3.1. Concentration and Temperature over Time
 
-[](Images/transient_plot.png)
+[](https://github.com/EduardoPach/CSTR_Simulation_Julia/blob/main/Images/transient_plot.png)
 
 ## 3.2. Phase Plot
 
-[](Images/phase_plot.png)
+[](https://github.com/EduardoPach/CSTR_Simulation_Julia/blob/main/Images/phase_plot.png)
 
