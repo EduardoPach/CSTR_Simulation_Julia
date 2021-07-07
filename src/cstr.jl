@@ -41,5 +41,19 @@ sol = solve(prob,Tsit5(),saveat=0.1)
 ####################################################################
 
 ########################### PLOTTING SOLUTION #############################
-plot(sol,layout=(1,2))
-plot(sol,vars=(1,2),ylabel="T",xlabel="Ca",title="Phase Space")
+gr()
+t = 0:0.1:10
+T_react = sol[2,:]
+Ca_react = sol[1,:]
+p_Ca = plot(t,Ca_react,title="Reactor's Concentration over Time",ylabel="Ca (mol/L)",
+            color=:red,label="");
+            
+p_T = plot(t,T_react,title="Reactor's Temperature over Time",ylabel="Temperature (K)",
+            xlabel="Time (min)",color=:orange,label="");
+
+transient_plot = plot(p_Ca,p_T,layout=(2,1))
+savefig(transient_plot,"Images/transient_plot.png")
+
+phase_plot = plot(sol,vars=(1,2),ylabel="Temperature (K)",xlabel="Concentration (mol/L)",
+                    title="Phase Space",label="")
+savefig(phase_plot,"Images/phase_plot.png")
