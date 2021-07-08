@@ -58,13 +58,21 @@ To solve this problem the Julia Packages [DifferentialEquations.jl](https://diff
 
 ## 3.1. Creating and Simulating CSTR Model
 
+<<<<<<< HEAD
+=======
+![](https://github.com/EduardoPach/CSTR_Simulation_Julia/blob/main/Images/transient_plot.png)
+>>>>>>> main
 
 Since our CSTR model comprises a system of ordinary differential equations (ODEs) we need to create a function that will return the derivatives for each variable (i.e. concentration and temperature) to use it in a numerical solver. To solve a system of ODEs using [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/tutorials/ode_example/) our function must have as arguments du,u,p and t, where:
 
+<<<<<<< HEAD
 - du: Derivatives array
 - u: States array
 - p: Parameters that the system of ODEs might relay on
 - t: Time  
+=======
+![](https://github.com/EduardoPach/CSTR_Simulation_Julia/blob/main/Images/phase_plot.png)
+>>>>>>> main
 
 Thus, our CSTR model can be written as:
 
