@@ -1,4 +1,3 @@
-using Plots: length, label_to_string
 using Plots,DifferentialEquations,Measures
 
 ############################################### CSTR FUNCTION #################################################################
@@ -42,15 +41,15 @@ sol = solve(prob,Tsit5(),saveat=0.1) # Solving the problem and saving the result
 ##############################################################################################################################
 
 ############################################### PLOTTING SOLUTION ###############################################################
-gr(size=(1000,1000)) # Backend choice
+gr(size=(800,450)) # Backend choice
 t = 0:0.1:10 # Time array
 T_react = sol[2,:] # Getting Temperature solution vector
 Ca_react = sol[1,:] # Getting Concentration solution vector
 p_Ca = plot(t,Ca_react,title="Reactor's Concentration",ylabel="Ca (mol/L)",
-            color=:red,label=""); # Creating a plot to Concentration
+            label=""); # Creating a plot to Concentration
             
 p_T = plot(t,T_react,title="Reactor's Temperature",ylabel="Temperature (K)",
-            xlabel="Time (min)",color=:orange,label=""); # Creating a plot to Temperature
+            xlabel="Time (min)",label=""); # Creating a plot to Temperature
 
 transient_plot = plot(p_Ca,p_T,layout=(2,1)) # Adding both plots to a grid layout of 2 rows and 1 column
 savefig(transient_plot,"Images/transient_plot.png") # Saving the transient_plot
@@ -58,12 +57,12 @@ savefig(transient_plot,"Images/transient_plot.png") # Saving the transient_plot
 phase_plot = plot(sol,vars=(1,2),ylabel="Temperature (K)",xlabel="Concentration (mol/L)",
                     title="Phase Space",label="") # Creating a plot from the States (Ca,T) a.k.a Phase Plot
 savefig(phase_plot,"Images/phase_plot.png") # Saving the phase_plot
+
+sub = plot(p_Ca,p_T,phase_plot,layout=@layout([[a;b] c]),left_margin=5mm)
+savefig(sub,"Images/all_in_one.png") # Saving all plots in one
 ##############################################################################################################################
 
 ############################################### ANIMATION PLOT ###############################################################
-
-plot(p_Ca,p_T,phase_plot,layout=@layout([[a;b] c]),left_margin=5mm,line_z=1:length(t))
-
 # This function simulates the CSTR for a giving Coolant Temerature.
 function sim_cstr(Tc)
     u0 = [Ca0 , T0] # Initial Condition Array
