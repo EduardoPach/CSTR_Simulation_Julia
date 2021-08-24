@@ -1,3 +1,4 @@
+using Plots: length
 using Plots,DifferentialEquations,Measures
 
 ############################################### CSTR FUNCTION #################################################################
@@ -7,7 +8,7 @@ function cstr(du,u,p,t)
     Ea,k₀,V,ρ,Cₚ,ΔH,UA,q,Caf,Tf,Tc = p # Parameters
     k(x) = k₀*exp(-Ea/8.314/x) # kinetic constant
 
-    du[1] = dCa = (q/V)*(Caf-Ca) - k(T)*Ca # derivatie of Ca
+    du[1]  = dCa = (q/V)*(Caf-Ca) - k(T)*Ca # derivatie of Ca
     du[2]  = dT = (q/V)*(Tf-T) + (-ΔH/ρ/Cₚ)*k(T)*Ca + (UA/V/ρ/Cₚ)*(Tc-T) # Derivative of T
 
 end
@@ -80,12 +81,32 @@ sols = sim_cstr.(Tcs); # Solving for each Coolant Temperature in Tcs
 anim = @animate for i ∈ 1:length(Tcs)
     # Plots each solution in the sols array (these makes a new plot for each solution, thus older solutions don't appear)
     plot(
-        plot(sols[i].t,sols[i][1,:],title="Reactor's Concentration",ylabel="Ca (mol/L)",label=:none),
-        plot(sols[i].t,sols[i][2,:],title="Reactor's Temperature",ylabel="Temperature (K)",xlabel="Time (min)",label=:none),
-        plot(sols[i],vars=(1,2),ylabel="Temperature (K)",xlabel="Concentration (mol/L)",title="Phase Space",label=:none),
-        layout=@layout([[a;b] c]),suptitle="Coolant Temperature = ",left_margin=5mm
+        plot(sols[i].t,sols[i][1,:],title="Reactor's Concentration (Tc = "*string(Tcs[i])*"K)",ylabel="Ca (mol/L)",label=:none),
+        plot(sols[i].t,sols[i][2,:],title="Reactor's Temperature (Tc = "*string(Tcs[i])*"K)",ylabel="Temperature (K)",xlabel="Time (min)",label=:none),
+        plot(sols[i],vars=(1,2),ylabel="Temperature (K)",xlabel="Concentration (mol/L)",title="Phase Space (Tc = "*string(Tcs[i])*"K)",label=:none),
+        layout=@layout([[a;b] c]),left_margin=10mm
     )
     scatter!((Ca0,T0),sp=3,label="Initial Condition",markercolor=:black) # Adds a point in the phase plot regarding the initial condition
 end
 gif(anim, "Images/cstr_coolant_effect.gif", fps = 10) # create a gif using the anim variable where we've stored our frames
 ##############################################################################################################################
+
+function derivatives_cstr(Ca,T,Tc)
+
+    k(x) = k₀*exp(-Ea/8.314/x) # kinetic constant
+
+    dCa = (q/V)*(Caf-Ca) - k(T)*Ca # derivatie of Ca
+    dT = (q/V)*(Tf-T) + (-ΔH/ρ/Cₚ)*k(T)*Ca + (UA/V/ρ/Cₚ)*(Tc-T) # Derivative of T
+
+    return [dCa,dT]
+
+end
+
+meshgrid(x,y) = (repeat(x, outer=length(y)),repeat(y, inner=length(x)))
+Ca_test,T_test = meshgrid(0:0.1:1,280:10:350)
+dv = derivatives_cstr.(Ca_test,T_test,305)
+dca,dt = hcat(dv...)'[:,1],hcat(dv...)'[:,2]
+scale = 1
+dca,dt = dca./sqrt.(dca.^2+dt.^2),dt./sqrt.(dca.^2+dt.^2)
+quiver(Ca_test,T_test,quiver=scale.*(dca,dt),color=:inferno)
+scatter!([Ca0],[T0])
