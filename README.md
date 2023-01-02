@@ -29,7 +29,7 @@ $$k(T) = k_0 .exp\left(\dfrac{-E_a}{RT} \right)$$ (2.2)
 
 In order to model the reactor, one must do the mass and energy balances. Assuming that the reactor is well-mixed one can come up with the following equations:
 
-$$ \dfrac{dC_a}{dt} = \dfrac{q}{V}(C_{A,Feed}-C_a)-kC_a$$ (2.3)
+$$\dfrac{dC_a}{dt} = \dfrac{q}{V}(C_{A,Feed}-C_a)-kC_a$$ (2.3)
 
 $$\dfrac{dT}{dt} = \dfrac{q}{V}(T_{Feed} - T) + \dfrac{-\Delta H_r}{\rho C_p} kC_a + \dfrac{UA}{V \rho C_p} (T_c - T) $$ (2.4)
 
